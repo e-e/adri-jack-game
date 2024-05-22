@@ -1,0 +1,4 @@
+extends Node
+
+signal update_connected_users_signal
+signal join_player_button_pressed(user_to_join)
