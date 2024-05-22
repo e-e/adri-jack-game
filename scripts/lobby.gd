@@ -10,6 +10,7 @@ var connected_user_row_scene: PackedScene = preload("res://scenes/connected_user
 func _ready():
   Logger.debug("is server? [%s]" % ["yes" if MultiplayerManager.is_server else "no"])
   SignalBus.connect("update_connected_users_signal", _update_users_list)
+  SignalBus.connect("create_and_enter_match", _create_and_enter_match)
   error_message_label.hide()
 
 func _update_users_list():
@@ -51,3 +52,18 @@ func _get_selected_user() -> String:
   if jack_button.button_group.get_pressed_button() == jack_button:
     selected = "jack"
   return selected
+
+func _create_and_enter_match(users):
+  $Matches.start_match(users)
+  $UI.hide()
+
+
+func _on_adri_button_pressed():
+  
+  if nickname_input.text.strip_edges() == "":
+    nickname_input.text = "adri_%s" % str(RandomNumberGenerator.new().randi_range(0, 100))
+
+
+func _on_jack_button_pressed():
+  if nickname_input.text.strip_edges() == "":
+    nickname_input.text = "jack_%s" % str(RandomNumberGenerator.new().randi_range(0, 100))

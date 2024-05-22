@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://10qt5brjuq0d"]
+[gd_scene load_steps=9 format=3 uid="uid://10qt5brjuq0d"]
 
 [ext_resource type="Script" path="res://scripts/lobby.gd" id="1_7divp"]
 [ext_resource type="Texture2D" uid="uid://bswgm5ox7cisn" path="res://assets/images/button-adri.png" id="2_nabw0"]
@@ -6,6 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://xa543c524k3k" path="res://assets/images/button-adri-pressed.png" id="3_8ak62"]
 [ext_resource type="Texture2D" uid="uid://dlt1dq5i6814o" path="res://assets/images/button-jack.png" id="4_wwbod"]
 [ext_resource type="Texture2D" uid="uid://c5cve1cnsq5ki" path="res://assets/images/button-jack-pressed.png" id="5_y42mv"]
+[ext_resource type="Script" path="res://scripts/matches.gd" id="7_lb23g"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_e1lhs"]
 content_margin_left = 25.0
@@ -87,4 +88,9 @@ text = "Connected Users"
 [node name="VBoxContainer" type="VBoxContainer" parent="UI/ConnectedUsersContainer"]
 layout_mode = 2
 
+[node name="Matches" type="Node2D" parent="."]
+script = ExtResource("7_lb23g")
+
+[connection signal="pressed" from="UI/RegisterContainer/HBoxContainer/AdriButton" to="." method="_on_adri_button_pressed"]
+[connection signal="pressed" from="UI/RegisterContainer/HBoxContainer/JackButton" to="." method="_on_jack_button_pressed"]
 [connection signal="pressed" from="UI/RegisterContainer/Button" to="." method="_on_join_button_pressed"]
