@@ -14,6 +14,15 @@ var direction_x
     player_id = id
     $InputSynchronizer.set_multiplayer_authority(id)
 
+func _enter_tree():
+  $InputSynchronizer.set_multiplayer_authority(str(name).to_int())
+  $MultiplayerSynchronizer.set_multiplayer_authority(1)
+#func _ready():
+  #self.ready.connect(_on_ready)
+#
+#func _on_ready():
+  #set_multiplayer_authority(player_id)
+
 func _physics_process(delta):
   _apply_movement_from_input(delta)
 
@@ -22,7 +31,7 @@ func _apply_movement_from_input(delta):
   direction_x = $InputSynchronizer.input_direction_x
   
   if direction_y:
-    velocity.y = direction_x * SPEED
+    velocity.y = direction_y * SPEED
   else:
     velocity.y = move_toward(velocity.y, 0, SPEED)
   

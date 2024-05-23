@@ -6,6 +6,7 @@ var matches: Dictionary = {}
 
 func get_match_key(users: Array) -> String:
   var ids: Array = users.map(func(user: Dictionary): return user.client_id)
+  ids.sort()
   return "match_%s_%s" % [str(ids[0]), str(ids[1])]
 
 func start_match(users: Array) -> void:

@@ -13,7 +13,7 @@ var players: Array = []
 # Called when the node enters the scene tree for the first time.
 func _ready():
   if MultiplayerManager.is_server:
-    _init_both()
+    _init_players()
   #else:
      #_init_self()
   
@@ -29,11 +29,15 @@ func _init_self():
   player_node.position = spawn_point.position
   $Players.add_child(player_node, true)
 
-func _init_both():
+func _init_players():
   for player in players:
+    Logger.debug("adding player %s" % player.nickname)
     var player_scene = _get_player_scene(player)
+    print(player_scene)
     var spawn_point = _get_player_start_position(player)
     var player_node = player_scene.instantiate()
+    print(player_node)
+    print(spawn_point)
     player_node.position = spawn_point.position
     player_node.player_id = player.client_id
     player_node.name = str(player.client_id)
@@ -43,5 +47,8 @@ func _get_player_scene(user) -> PackedScene:
   return player_scene_adri if user.character == "adri" else player_scene_jack
 
 func _get_player_start_position(user) -> Marker2D:
+  Logger.debug("getting start position for [%s][%s]" % [user.nickname, user.character])
+  print(spawn_point_adri)
+  print(spawn_point_jack)
   return spawn_point_adri if user.character == "adri" else spawn_point_jack
 
