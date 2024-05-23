@@ -68,6 +68,8 @@ func _set_client_nickname(id: int, nickname: String, character: String):
   
   _update_connected_user_list.rpc(connected_clients)
 
+# this is called using rpc_id, so shouldn't need to verify that only the
+# server is being called
 @rpc("any_peer")
 func _create_room(joined_client_id: int, joining_client_id: int):
   var joining_user = get_user_by_id(joining_client_id)
@@ -85,6 +87,10 @@ func _create_room(joined_client_id: int, joining_client_id: int):
   
   _join_room.rpc_id(joining_user.client_id, joined_user.client_id)
   _join_room.rpc_id(joined_user.client_id, joining_user.client_id)
+  
+  # test to see if making sure both clients are in the room first fixes the issue of nodes not being found
+  await get_tree().create_timer(3).timeout
+  
   SignalBus.create_and_enter_match.emit([joining_user, joined_user])
   _update_connected_user_list.rpc(connected_clients)
 
