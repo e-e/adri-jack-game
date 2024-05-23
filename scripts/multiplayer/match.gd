@@ -14,16 +14,20 @@ var players: Array = []
 func _ready():
   if MultiplayerManager.is_server:
     _init_both()
-  else:
-    _init_self()
+  #else:
+     #_init_self()
+  
+  #if not MultiplayerManager.is_server:
+    #_init_self()
 
 func _init_self():
   var player_scene = _get_player_scene(MultiplayerManager.player)
   var spawn_point = _get_player_start_position(MultiplayerManager.player)
   var player_node = player_scene.instantiate()
   player_node.name = str(MultiplayerManager.player.client_id)
+  player_node.player_id = MultiplayerManager.player.client_id
   player_node.position = spawn_point.position
-  $Players.add_child(player_node)
+  $Players.add_child(player_node, true)
 
 func _init_both():
   for player in players:
@@ -31,6 +35,7 @@ func _init_both():
     var spawn_point = _get_player_start_position(player)
     var player_node = player_scene.instantiate()
     player_node.position = spawn_point.position
+    player_node.player_id = player.client_id
     player_node.name = str(player.client_id)
     $Players.add_child(player_node)
 

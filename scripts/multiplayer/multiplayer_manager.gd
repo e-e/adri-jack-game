@@ -53,8 +53,6 @@ func _on_successful_server_connection(nickname: String, character: String):
 
 @rpc("authority")
 func _update_connected_user_list(users: Array):
-  var sender_id = multiplayer.get_remote_sender_id()
-
   if not is_server:
     connected_clients = users
     SignalBus.update_connected_users_signal.emit()
