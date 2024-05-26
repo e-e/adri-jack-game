@@ -1,6 +1,7 @@
-[gd_scene load_steps=9 format=3 uid="uid://10qt5brjuq0d"]
+[gd_scene load_steps=10 format=3 uid="uid://10qt5brjuq0d"]
 
 [ext_resource type="Script" path="res://scripts/lobby.gd" id="1_7divp"]
+[ext_resource type="Script" path="res://scenes/screens/splash_screen.gd" id="2_e0c0o"]
 [ext_resource type="Texture2D" uid="uid://bswgm5ox7cisn" path="res://assets/images/button-adri.png" id="2_nabw0"]
 [ext_resource type="ButtonGroup" uid="uid://dyv3rdacqb4yg" path="res://assets/lobby_character_button_group.tres" id="2_xug6l"]
 [ext_resource type="Texture2D" uid="uid://xa543c524k3k" path="res://assets/images/button-adri-pressed.png" id="3_8ak62"]
@@ -14,7 +15,25 @@ content_margin_left = 25.0
 [node name="Lobby" type="Node2D"]
 script = ExtResource("1_7divp")
 
+[node name="SplashScreen" type="Node2D" parent="."]
+script = ExtResource("2_e0c0o")
+
+[node name="Label" type="Label" parent="SplashScreen"]
+offset_left = 516.0
+offset_top = 288.0
+offset_right = 607.0
+offset_bottom = 311.0
+text = "ADRI + JACK"
+
+[node name="Label2" type="Label" parent="SplashScreen"]
+offset_left = 470.0
+offset_top = 369.0
+offset_right = 659.0
+offset_bottom = 392.0
+text = "ULTIMATE SMACKDOWN"
+
 [node name="UI" type="Control" parent="."]
+visible = false
 layout_mode = 3
 anchors_preset = 0
 offset_right = 1152.0
@@ -39,6 +58,7 @@ layout_mode = 2
 
 [node name="Label" type="Label" parent="UI/RegisterContainer/Header_HBoxContainer"]
 layout_mode = 2
+theme_override_font_sizes/font_size = 18
 text = "Enter your name to join"
 
 [node name="ErrorMessageLabel" type="Label" parent="UI/RegisterContainer/Header_HBoxContainer"]
@@ -50,11 +70,13 @@ text = "This is an error!"
 
 [node name="TextEdit" type="TextEdit" parent="UI/RegisterContainer"]
 layout_mode = 2
+theme_override_font_sizes/font_size = 30
 placeholder_text = "nickname"
 scroll_fit_content_height = true
 
 [node name="HBoxContainer" type="HBoxContainer" parent="UI/RegisterContainer"]
 layout_mode = 2
+alignment = 1
 
 [node name="AdriButton" type="TextureButton" parent="UI/RegisterContainer/HBoxContainer"]
 layout_mode = 2

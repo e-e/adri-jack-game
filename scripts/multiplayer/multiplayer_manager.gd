@@ -2,6 +2,7 @@ extends Node
 
 const SERVER_PORT = 8081
 const SERVER_ADDRESS = "localhost"
+const SERVER_WS_ADDRESS = "ws://localhost"
 
 var connected_clients = []
 var opponent
@@ -10,25 +11,47 @@ var player
 var is_server: bool = OS.has_feature("dedicated_server")
 const match_room_scene: PackedScene = preload("res://scenes/screens/match.tscn")
 
+var use_websocket: bool = true
+var is_connected: bool = false
+
 func _ready():
   if is_server:
     create_server()
   else:
     SignalBus.join_player_button_pressed.connect(_on_join_player_button_pressed)
 
+func _process(delta):
+  if use_websocket:
+    multiplayer.multiplayer_peer.poll()
+
 func create_server():
-  var server_peer = ENetMultiplayerPeer.new()
-  server_peer.create_server(SERVER_PORT)
+  var server_peer
+  if use_websocket:
+    server_peer = WebSocketMultiplayerPeer.new()
+    server_peer.create_server(SERVER_PORT, "0.0.0.0")
+  else:
+    server_peer = ENetMultiplayerPeer.new()
+    server_peer.create_server(SERVER_PORT)
   
   multiplayer.multiplayer_peer = server_peer
   multiplayer.peer_connected.connect(_client_connected)
   multiplayer.peer_disconnected.connect(_client_disconnected)
   
+  is_connected = true
+  
   Logger.debug("server started: [id=%s]" % str(multiplayer.get_unique_id()))
 
 func join_server(nickname: String, character: String):
-  var client_peer = ENetMultiplayerPeer.new()
-  var connection_error: int = client_peer.create_client(SERVER_ADDRESS, SERVER_PORT)
+  Logger.debug("[%s] wants to join server [%s]" % [nickname, SERVER_ADDRESS])
+  var client_peer
+  var connection_error
+  
+  if use_websocket:
+    client_peer = WebSocketMultiplayerPeer.new()
+    connection_error = client_peer.create_client("%s:%s" % [SERVER_WS_ADDRESS, SERVER_PORT])
+  else:
+    client_peer = ENetMultiplayerPeer.new()
+    connection_error = client_peer.create_client(SERVER_ADDRESS, SERVER_PORT)
   
   if connection_error != 0:
     Logger.debug("[%s] failed to connect" % nickname)
@@ -40,6 +63,7 @@ func join_server(nickname: String, character: String):
 func _client_connected(id: int):
   connected_clients.append({"client_id": id, "status": "lobby"})
   Logger.debug("client has connected: %s" % id)
+  is_connected = true
   
 
 func _client_disconnected(id: int):

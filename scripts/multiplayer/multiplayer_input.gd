@@ -4,6 +4,7 @@ extends MultiplayerSynchronizer
 
 var input_direction_x
 var input_direction_y
+var strength
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -23,8 +24,9 @@ func _process(delta):
   pass
 
 func _set_input_directions():
-  input_direction_x = Input.get_axis("move_left", "move_right")
-  input_direction_y = Input.get_axis("move_up", "move_down")
+  strength = InputController.strength
+  input_direction_x = InputController.input_direction_x
+  input_direction_y = InputController.input_direction_y
 
 @rpc("call_local")
 func jump():

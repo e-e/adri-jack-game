@@ -7,6 +7,7 @@ const player_scene_jack: PackedScene = preload("res://scenes/player_jack.tscn")
 @onready var spawn_point_jack = $SpawnPointJack
 
 @onready var Players = $Players
+@onready var button_controller: ButtonController = $ButtonController
 
 var players: Array = []
 
@@ -14,20 +15,12 @@ var players: Array = []
 func _ready():
   if MultiplayerManager.is_server:
     _init_players()
-  #else:
-     #_init_self()
-  
-  #if not MultiplayerManager.is_server:
-    #_init_self()
+  else:
+    pass
 
-func _init_self():
-  var player_scene = _get_player_scene(MultiplayerManager.player)
-  var spawn_point = _get_player_start_position(MultiplayerManager.player)
-  var player_node = player_scene.instantiate()
-  player_node.name = str(MultiplayerManager.player.client_id)
-  player_node.player_id = MultiplayerManager.player.client_id
-  player_node.position = spawn_point.position
-  $Players.add_child(player_node, true)
+
+func _on_button_pressed(btn: String):
+  Logger.debug("button pressed: %s" % btn)
 
 func _init_players():
   for player in players:

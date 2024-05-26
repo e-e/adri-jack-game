@@ -2,3 +2,5 @@
 .godot/
 _builds
 .DS_Store
+node_modules
+linux_server*

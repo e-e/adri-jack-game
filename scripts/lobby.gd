@@ -6,12 +6,20 @@ var connected_user_row_scene: PackedScene = preload("res://scenes/connected_user
 @onready var adri_button = $UI/RegisterContainer/HBoxContainer/AdriButton
 @onready var jack_button = $UI/RegisterContainer/HBoxContainer/JackButton
 
+@onready var splash_screen: SplashScreen = $SplashScreen
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
   Logger.debug("is server? [%s]" % ["yes" if MultiplayerManager.is_server else "no"])
   SignalBus.connect("update_connected_users_signal", _update_users_list)
   SignalBus.connect("create_and_enter_match", _create_and_enter_match)
   error_message_label.hide()
+  
+  splash_screen.splash_screen_finished.connect(_show_sign_in)
+  
+func _show_sign_in():
+  splash_screen.hide()
+  $UI.show()
 
 func _update_users_list():
   Logger.debug("updating users list...")
@@ -59,7 +67,6 @@ func _create_and_enter_match(users):
 
 
 func _on_adri_button_pressed():
-  
   if nickname_input.text.strip_edges() == "":
     nickname_input.text = "adri_%s" % str(RandomNumberGenerator.new().randi_range(0, 100))
 
