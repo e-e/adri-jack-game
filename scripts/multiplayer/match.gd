@@ -16,7 +16,7 @@ func _ready():
   if MultiplayerManager.is_server:
     _init_players()
   else:
-    pass
+    MultiplayerManager.current_match = self
 
 
 func _on_button_pressed(btn: String):
@@ -45,3 +45,41 @@ func _get_player_start_position(user) -> Marker2D:
   print(spawn_point_jack)
   return spawn_point_adri if user.character == "adri" else spawn_point_jack
 
+func get_opponent_player_scene() -> PlayerBase:
+  var player: PlayerBase
+  for node in Players.get_children():
+    if node.name != str(MultiplayerManager.player.client_id):
+      player = node
+      break
+  return player
+    
+func _apply_flip_h():
+  if not MultiplayerManager.is_server:
+    return
+  
+  if Players.get_child_count() != 2:
+    Logger.debug("match - waiting for two players")
+    return
+  
+  var player_1 = Players.get_child(0)
+  var player_2 = Players.get_child(1)
+  
+  if player_1.position.x == player_2.position.x:
+    return
+  
+  var left_player: PlayerBase
+  var right_player: PlayerBase
+  
+  if player_1.position.x < player_2.position.x:
+    left_player = player_1
+    right_player = player_2
+  else:
+    left_player = player_2
+    right_player = player_1
+  
+  left_player.apply_flip_h(false)
+  right_player.apply_flip_h(true)
+  
+func _physics_process(_delta: float) -> void:
+  _apply_flip_h()
+  

@@ -88,7 +88,7 @@ func _render_debug(new_position: Vector2) -> void:
   $DirectionLabel.text = "Direction: (%s, %s)" % [str(direction.x), str(direction.y)]
   $PositionLabel.text = "Position: (%s, %s)" % [str(new_position.x), str(new_position.y)]
   
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
   var new_position: Vector2 = -(_magnitude() * direction)
   
   button_sprite.position = new_position

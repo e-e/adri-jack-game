@@ -1,5 +1,6 @@
-extends CharacterBody2D
+@tool
 
+class_name PlayerBase extends PlayerExports
 
 const SPEED = 300.0
 const JUMP_VELOCITY = -400.0
@@ -18,7 +19,6 @@ var show_debug: bool = false
     $InputSynchronizer.set_multiplayer_authority(id)
 
 func _enter_tree():
-  motion_mode = MOTION_MODE_FLOATING
   $InputSynchronizer.set_multiplayer_authority(str(name).to_int())
   $MultiplayerSynchronizer.set_multiplayer_authority(1)
 
@@ -26,14 +26,34 @@ func _ready():
   #self.ready.connect(_on_ready)
   pass
 
+
 #func _on_ready():
   #set_multiplayer_authority(player_id)
 
-func _physics_process(delta):
-  _apply_movement_from_input(delta)
-  _render_debug()
 
+func apply_flip_h(should_flip: bool):
+  animation_player.flip_h = should_flip
+
+func _physics_process(delta):
+  if not Engine.is_editor_hint():
+    _apply_movement_from_input(delta)
+    _apply_animations(delta)
+    _render_debug()
+
+# note: the "flip_h" is done above in "apply_flip_h", but is called from the server's instance of the "match"
+func _apply_animations(delta):
+  if MultiplayerManager.is_server:
+    return
+  
+  if strength == 0:
+    animation_player.play("idle")
+  else:
+    animation_player.play("walk")
+    
 func _apply_movement_from_input(delta):
+  #if not MultiplayerManager.is_server:
+    #return
+  
   strength = $InputSynchronizer.strength
   direction_y = $InputSynchronizer.input_direction_y
   direction_x = $InputSynchronizer.input_direction_x
@@ -57,7 +77,6 @@ func _render_debug():
   
   var debug_text: String = "velocity: (%s, %s)" % [str(velocity.x), str(velocity.y)]
   debug_text += "\nstrength: %s" % str($InputSynchronizer.strength)
-  debug_text += "\ndirection_y: %s" % str($InputSynchronizer.input_direction_y)
-  debug_text += "\ndirection_x: %s" % str($InputSynchronizer.input_direction_x)
+  debug_text += "\animation: %s" % animation_player.animation
   
   $DebugLabel.text = debug_text

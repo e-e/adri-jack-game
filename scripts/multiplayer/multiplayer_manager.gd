@@ -7,6 +7,7 @@ const SERVER_WS_ADDRESS = "ws://localhost"
 var connected_clients = []
 var opponent
 var player
+var current_match: Match
 
 var is_server: bool = OS.has_feature("dedicated_server")
 const match_room_scene: PackedScene = preload("res://scenes/screens/match.tscn")
@@ -20,7 +21,7 @@ func _ready():
   else:
     SignalBus.join_player_button_pressed.connect(_on_join_player_button_pressed)
 
-func _process(delta):
+func _process(_delta):
   if use_websocket:
     multiplayer.multiplayer_peer.poll()
 
