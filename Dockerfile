@@ -6,4 +6,4 @@ COPY . /game-server
 EXPOSE 16001
 
 
-CMD [ "./_builds/linux/linux_server.sh", "--server_port=16001", '--client_port=""' ]
+CMD [ "./_builds/linux/linux_server.sh", "--server_port=16001" ]
