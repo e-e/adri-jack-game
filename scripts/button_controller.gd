@@ -5,7 +5,6 @@ signal button_released(btn: String)
 
 func _on_up_button_pressed():
   button_pressed.emit("up")
-  TouchScreenButton
 
 func _on_up_button_released():
   button_released.emit()

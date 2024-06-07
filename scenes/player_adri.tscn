@@ -1,13 +1,13 @@
-[gd_scene load_steps=12 format=3 uid="uid://dp3sxpqbjdbd4"]
+[gd_scene load_steps=24 format=3 uid="uid://dp3sxpqbjdbd4"]
 
 [ext_resource type="Script" path="res://scripts/player_base.gd" id="1_bve1u"]
 [ext_resource type="Texture2D" uid="uid://b27tnw5x3fw7r" path="res://assets/images/characters/adri/idle-01.png" id="2_4ya6k"]
 [ext_resource type="Script" path="res://scripts/multiplayer/multiplayer_input.gd" id="2_22sm1"]
 [ext_resource type="Texture2D" uid="uid://ykv5sayjbg64" path="res://assets/images/characters/adri/idle-02.png" id="3_1yyq5"]
 [ext_resource type="Texture2D" uid="uid://bykq8dtycahmm" path="res://assets/images/characters/adri/idle-03.png" id="4_0j0nb"]
-[ext_resource type="Texture2D" uid="uid://babe83uh6qf5n" path="res://assets/images/characters/adri/walk-01.png" id="5_qat8b"]
-[ext_resource type="Texture2D" uid="uid://by8e1gdnppfbq" path="res://assets/images/characters/adri/walk-02.png" id="6_uj8vm"]
-[ext_resource type="Texture2D" uid="uid://bcqiulomc0tx2" path="res://assets/images/characters/adri/walk-03.png" id="7_nxpbd"]
+[ext_resource type="Texture2D" uid="uid://rgidpiwwvsam" path="res://assets/images/characters/adri/spritesheets/walk-spritesheet.png" id="9_pi2xk"]
+[ext_resource type="Texture2D" uid="uid://camsv5guennbn" path="res://assets/images/items/folding-chair.png" id="9_qnrkv"]
+[ext_resource type="Script" path="res://scripts/player/item.gd" id="9_sa8qa"]
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_dhuo4"]
 properties/0/path = NodePath("InputSynchronizer:input_direction_x")
@@ -19,6 +19,9 @@ properties/1/replication_mode = 1
 properties/2/path = NodePath("InputSynchronizer:strength")
 properties/2/spawn = true
 properties/2/replication_mode = 1
+properties/3/path = NodePath("InputSynchronizer:do_use_item")
+properties/3/spawn = true
+properties/3/replication_mode = 1
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_hni3j"]
 properties/0/path = NodePath(".:position")
@@ -30,6 +33,40 @@ properties/1/replication_mode = 1
 properties/2/path = NodePath("AnimatedSprite2D:flip_h")
 properties/2/spawn = true
 properties/2/replication_mode = 1
+properties/3/path = NodePath("Item:scale")
+properties/3/spawn = true
+properties/3/replication_mode = 1
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_j77x4"]
+size = Vector2(56, 235)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nucqw"]
+atlas = ExtResource("9_pi2xk")
+region = Rect2(0, 0, 1024, 1240)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_elvj6"]
+atlas = ExtResource("9_pi2xk")
+region = Rect2(1024, 0, 1024, 1240)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_a17ru"]
+atlas = ExtResource("9_pi2xk")
+region = Rect2(2048, 0, 1024, 1240)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fp0wm"]
+atlas = ExtResource("9_pi2xk")
+region = Rect2(3072, 0, 1024, 1240)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7til4"]
+atlas = ExtResource("9_pi2xk")
+region = Rect2(4096, 0, 1024, 1240)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ao6tf"]
+atlas = ExtResource("9_pi2xk")
+region = Rect2(5120, 0, 1024, 1240)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6eiux"]
+atlas = ExtResource("9_pi2xk")
+region = Rect2(6144, 0, 1024, 1240)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_em4pu"]
 animations = [{
@@ -48,32 +85,81 @@ animations = [{
 }],
 "loop": true,
 "name": &"idle",
-"speed": 5.0
+"speed": 7.0
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("7_nxpbd")
+"texture": SubResource("AtlasTexture_nucqw")
 }, {
 "duration": 1.0,
-"texture": ExtResource("6_uj8vm")
+"texture": SubResource("AtlasTexture_elvj6")
 }, {
 "duration": 1.0,
-"texture": ExtResource("7_nxpbd")
+"texture": SubResource("AtlasTexture_a17ru")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fp0wm")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7til4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ao6tf")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6eiux")
 }],
 "loop": true,
 "name": &"walk",
 "speed": 5.0
 }]
 
+[sub_resource type="Animation" id="Animation_crmve"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:rotation")
+tracks/0/interp = 3
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+
+[sub_resource type="Animation" id="Animation_l84k3"]
+resource_name = "hit"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:rotation")
+tracks/0/interp = 3
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.233333, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [0.0, 0.964485, 0.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_hwvcb"]
+_data = {
+"RESET": SubResource("Animation_crmve"),
+"hit": SubResource("Animation_l84k3")
+}
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_escfy"]
+size = Vector2(75, 100)
+
 [node name="PlayerAdri" type="CharacterBody2D"]
+collision_layer = 0
 motion_mode = 1
 script = ExtResource("1_bve1u")
 idle_frame_1 = ExtResource("2_4ya6k")
 idle_frame_2 = ExtResource("3_1yyq5")
 idle_frame_3 = ExtResource("4_0j0nb")
-walk_frame_1 = ExtResource("5_qat8b")
-walk_frame_2 = ExtResource("6_uj8vm")
-walk_frame_3 = ExtResource("7_nxpbd")
 
 [node name="InputSynchronizer" type="MultiplayerSynchronizer" parent="."]
 replication_config = SubResource("SceneReplicationConfig_dhuo4")
@@ -82,8 +168,9 @@ script = ExtResource("2_22sm1")
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
 replication_config = SubResource("SceneReplicationConfig_hni3j")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
-visible = false
+[node name="PlayerCollisionShape" type="CollisionShape2D" parent="."]
+position = Vector2(-16, -6.5)
+shape = SubResource("RectangleShape2D_j77x4")
 
 [node name="DebugLabel" type="Label" parent="."]
 offset_left = -113.0
@@ -94,5 +181,28 @@ theme_override_font_sizes/font_size = 30
 text = "velocity:"
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(-20, -160)
+scale = Vector2(0.5, 0.5)
 sprite_frames = SubResource("SpriteFrames_em4pu")
 animation = &"walk"
+
+[node name="Item" type="Node2D" parent="."]
+script = ExtResource("9_sa8qa")
+
+[node name="AnimatableBody2D" type="AnimatableBody2D" parent="Item"]
+collision_layer = 0
+
+[node name="Sprite2D" type="Sprite2D" parent="Item/AnimatableBody2D"]
+position = Vector2(0, -139)
+scale = Vector2(0.640001, 0.640001)
+texture = ExtResource("9_qnrkv")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Item/AnimatableBody2D"]
+libraries = {
+"": SubResource("AnimationLibrary_hwvcb")
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Item/AnimatableBody2D"]
+position = Vector2(-5, -149)
+rotation = -0.378695
+shape = SubResource("RectangleShape2D_escfy")

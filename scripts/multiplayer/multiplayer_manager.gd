@@ -1,9 +1,5 @@
 extends Node
 
-const SERVER_PORT = 8081
-const SERVER_ADDRESS = "localhost"
-const SERVER_WS_ADDRESS = "ws://localhost"
-
 var connected_clients = []
 var opponent
 var player
@@ -13,7 +9,7 @@ var is_server: bool = OS.has_feature("dedicated_server")
 const match_room_scene: PackedScene = preload("res://scenes/screens/match.tscn")
 
 var use_websocket: bool = true
-var is_connected: bool = false
+var is_multiplayer_connected: bool = false
 
 func _ready():
   if is_server:
@@ -29,30 +25,30 @@ func create_server():
   var server_peer
   if use_websocket:
     server_peer = WebSocketMultiplayerPeer.new()
-    server_peer.create_server(SERVER_PORT, "0.0.0.0")
+    server_peer.create_server(int(Config.server_port), "0.0.0.0")
   else:
     server_peer = ENetMultiplayerPeer.new()
-    server_peer.create_server(SERVER_PORT)
+    server_peer.create_server(int(Config.server_port))
   
   multiplayer.multiplayer_peer = server_peer
   multiplayer.peer_connected.connect(_client_connected)
   multiplayer.peer_disconnected.connect(_client_disconnected)
   
-  is_connected = true
+  is_multiplayer_connected = true
   
   Logger.debug("server started: [id=%s]" % str(multiplayer.get_unique_id()))
 
 func join_server(nickname: String, character: String):
-  Logger.debug("[%s] wants to join server [%s]" % [nickname, SERVER_ADDRESS])
+  Logger.debug("[%s] wants to join server [%s]" % [nickname, Config.server_address])
   var client_peer
   var connection_error
   
   if use_websocket:
     client_peer = WebSocketMultiplayerPeer.new()
-    connection_error = client_peer.create_client("%s:%s" % [SERVER_WS_ADDRESS, SERVER_PORT])
+    connection_error = client_peer.create_client("%s:%s" % [Config.server_ws_address, Config.client_port])
   else:
     client_peer = ENetMultiplayerPeer.new()
-    connection_error = client_peer.create_client(SERVER_ADDRESS, SERVER_PORT)
+    connection_error = client_peer.create_client(Config.server_address, int(Config.client_port))
   
   if connection_error != 0:
     Logger.debug("[%s] failed to connect" % nickname)
@@ -64,7 +60,7 @@ func join_server(nickname: String, character: String):
 func _client_connected(id: int):
   connected_clients.append({"client_id": id, "status": "lobby"})
   Logger.debug("client has connected: %s" % id)
-  is_connected = true
+  is_multiplayer_connected = true
   
 
 func _client_disconnected(id: int):
@@ -114,7 +110,7 @@ func _create_room(joined_client_id: int, joining_client_id: int):
   _join_room.rpc_id(joined_user.client_id, joining_user.client_id)
   
   # test to see if making sure both clients are in the room first fixes the issue of nodes not being found
-  await get_tree().create_timer(3).timeout
+  #await get_tree().create_timer(3).timeout
   
   SignalBus.create_and_enter_match.emit([joining_user, joined_user])
   _update_connected_user_list.rpc(connected_clients)

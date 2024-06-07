@@ -1,13 +1,13 @@
-[gd_scene load_steps=12 format=3 uid="uid://be4swt4f1nb3w"]
+[gd_scene load_steps=24 format=3 uid="uid://be4swt4f1nb3w"]
 
 [ext_resource type="Script" path="res://scripts/player_base.gd" id="1_6xoje"]
 [ext_resource type="Texture2D" uid="uid://bvrg88hnoe3no" path="res://assets/images/characters/jack/idle-01.png" id="2_3pl0v"]
 [ext_resource type="Script" path="res://scripts/multiplayer/multiplayer_input.gd" id="2_gjfw3"]
 [ext_resource type="Texture2D" uid="uid://cgjgt0kwy5j78" path="res://assets/images/characters/jack/idle-02.png" id="3_aoqou"]
 [ext_resource type="Texture2D" uid="uid://ctacsbrth7m38" path="res://assets/images/characters/jack/idle-03.png" id="4_is7vk"]
-[ext_resource type="Texture2D" uid="uid://c52xnq0y88grw" path="res://assets/images/characters/jack/walk-01.png" id="5_21vpr"]
-[ext_resource type="Texture2D" uid="uid://dasa3lss6n00c" path="res://assets/images/characters/jack/walk-02.png" id="6_vtqej"]
-[ext_resource type="Texture2D" uid="uid://c2rdh1e7uvxpf" path="res://assets/images/characters/jack/walk-03.png" id="7_6aq6e"]
+[ext_resource type="Texture2D" uid="uid://d4al248t3xlr" path="res://assets/images/characters/jack/spritesheets/walk-spritesheet.png" id="9_1ibdj"]
+[ext_resource type="Script" path="res://scripts/player/item.gd" id="9_fkqiu"]
+[ext_resource type="Texture2D" uid="uid://camsv5guennbn" path="res://assets/images/items/folding-chair.png" id="10_xhd1u"]
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_ej6uh"]
 properties/0/path = NodePath("InputSynchronizer:input_direction_x")
@@ -30,6 +30,40 @@ properties/1/replication_mode = 1
 properties/2/path = NodePath("AnimatedSprite2D:flip_h")
 properties/2/spawn = true
 properties/2/replication_mode = 1
+properties/3/path = NodePath("Item:scale")
+properties/3/spawn = true
+properties/3/replication_mode = 1
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_kf0bb"]
+size = Vector2(56, 235)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_oh7vw"]
+atlas = ExtResource("9_1ibdj")
+region = Rect2(0, 0, 1024, 1240)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8et6b"]
+atlas = ExtResource("9_1ibdj")
+region = Rect2(1024, 0, 1024, 1240)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ol2v6"]
+atlas = ExtResource("9_1ibdj")
+region = Rect2(2048, 0, 1024, 1240)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kd6yl"]
+atlas = ExtResource("9_1ibdj")
+region = Rect2(3072, 0, 1024, 1240)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4nwxr"]
+atlas = ExtResource("9_1ibdj")
+region = Rect2(4096, 0, 1024, 1240)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_k7c15"]
+atlas = ExtResource("9_1ibdj")
+region = Rect2(5120, 0, 1024, 1240)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ppbny"]
+atlas = ExtResource("9_1ibdj")
+region = Rect2(6144, 0, 1024, 1240)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_vrbsj"]
 animations = [{
@@ -48,32 +82,81 @@ animations = [{
 }],
 "loop": true,
 "name": &"idle",
-"speed": 5.0
+"speed": 3.0
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("7_6aq6e")
+"texture": SubResource("AtlasTexture_oh7vw")
 }, {
 "duration": 1.0,
-"texture": ExtResource("6_vtqej")
+"texture": SubResource("AtlasTexture_8et6b")
 }, {
 "duration": 1.0,
-"texture": ExtResource("7_6aq6e")
+"texture": SubResource("AtlasTexture_ol2v6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kd6yl")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4nwxr")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_k7c15")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ppbny")
 }],
 "loop": true,
 "name": &"walk",
-"speed": 5.0
+"speed": 7.0
 }]
 
+[sub_resource type="Animation" id="Animation_crmve"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:rotation")
+tracks/0/interp = 3
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+
+[sub_resource type="Animation" id="Animation_l84k3"]
+resource_name = "hit"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:rotation")
+tracks/0/interp = 3
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.233333, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [0.0, 0.964485, 0.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_hwvcb"]
+_data = {
+"RESET": SubResource("Animation_crmve"),
+"hit": SubResource("Animation_l84k3")
+}
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_70jk0"]
+size = Vector2(75, 100)
+
 [node name="PlayerJack" type="CharacterBody2D"]
+collision_layer = 0
 motion_mode = 1
 script = ExtResource("1_6xoje")
 idle_frame_1 = ExtResource("2_3pl0v")
 idle_frame_2 = ExtResource("3_aoqou")
 idle_frame_3 = ExtResource("4_is7vk")
-walk_frame_1 = ExtResource("5_21vpr")
-walk_frame_2 = ExtResource("6_vtqej")
-walk_frame_3 = ExtResource("7_6aq6e")
 
 [node name="InputSynchronizer" type="MultiplayerSynchronizer" parent="."]
 replication_config = SubResource("SceneReplicationConfig_ej6uh")
@@ -82,8 +165,9 @@ script = ExtResource("2_gjfw3")
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
 replication_config = SubResource("SceneReplicationConfig_7v0ar")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
-visible = false
+[node name="PlayerCollisionShape" type="CollisionShape2D" parent="."]
+position = Vector2(-16, -6.5)
+shape = SubResource("RectangleShape2D_kf0bb")
 
 [node name="DebugLabel" type="Label" parent="."]
 offset_left = -113.0
@@ -94,5 +178,28 @@ theme_override_font_sizes/font_size = 30
 text = "velocity:"
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(-20, -160)
+scale = Vector2(0.5, 0.5)
 sprite_frames = SubResource("SpriteFrames_vrbsj")
 animation = &"walk"
+
+[node name="Item" type="Node2D" parent="."]
+script = ExtResource("9_fkqiu")
+
+[node name="AnimatableBody2D" type="AnimatableBody2D" parent="Item"]
+collision_layer = 0
+
+[node name="Sprite2D" type="Sprite2D" parent="Item/AnimatableBody2D"]
+position = Vector2(0, -139)
+scale = Vector2(0.640001, 0.640001)
+texture = ExtResource("10_xhd1u")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Item/AnimatableBody2D"]
+libraries = {
+"": SubResource("AnimationLibrary_hwvcb")
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Item/AnimatableBody2D"]
+position = Vector2(-5, -149)
+rotation = -0.378695
+shape = SubResource("RectangleShape2D_70jk0")

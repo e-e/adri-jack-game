@@ -38,7 +38,6 @@ func _ready():
 
 func _unhandled_input(event):
   if event is InputEventScreenTouch or event is InputEventMouseButton:
-    print("global click position: (%s, %s)" % [str(event.position.x), str(event.position.y)])
     _handle_touch(event.position, event.pressed)
   
   if event is InputEventGesture:
@@ -95,4 +94,3 @@ func _process(_delta: float) -> void:
   pad_sprite.modulate = Color(0.8, 0.8, 0.8) if is_active else Color(1.0, 1.0, 1.0)
   
   _render_debug(new_position)
-

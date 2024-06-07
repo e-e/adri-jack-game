@@ -2,11 +2,11 @@
 
 [ext_resource type="Script" path="res://scripts/lobby.gd" id="1_7divp"]
 [ext_resource type="Script" path="res://scenes/screens/splash_screen.gd" id="2_e0c0o"]
-[ext_resource type="Texture2D" uid="uid://bswgm5ox7cisn" path="res://assets/images/button-adri.png" id="2_nabw0"]
 [ext_resource type="ButtonGroup" uid="uid://dyv3rdacqb4yg" path="res://assets/lobby_character_button_group.tres" id="2_xug6l"]
-[ext_resource type="Texture2D" uid="uid://xa543c524k3k" path="res://assets/images/button-adri-pressed.png" id="3_8ak62"]
-[ext_resource type="Texture2D" uid="uid://dlt1dq5i6814o" path="res://assets/images/button-jack.png" id="4_wwbod"]
-[ext_resource type="Texture2D" uid="uid://c5cve1cnsq5ki" path="res://assets/images/button-jack-pressed.png" id="5_y42mv"]
+[ext_resource type="Texture2D" uid="uid://wan51fq1a6q4" path="res://assets/images/button-adri-256x256.png" id="4_w1vhj"]
+[ext_resource type="Texture2D" uid="uid://bwiw0xslrub0v" path="res://assets/images/button-adri-pressed-256x256.png" id="5_jgnex"]
+[ext_resource type="Texture2D" uid="uid://dc8d4gtwknjsg" path="res://assets/images/button-jack-256x256.png" id="6_conkq"]
+[ext_resource type="Texture2D" uid="uid://da5252tv5wssy" path="res://assets/images/button-jack-pressed-256x256.png" id="7_ks8dk"]
 [ext_resource type="Script" path="res://scripts/matches.gd" id="7_lb23g"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_e1lhs"]
@@ -19,46 +19,45 @@ script = ExtResource("1_7divp")
 script = ExtResource("2_e0c0o")
 
 [node name="Label" type="Label" parent="SplashScreen"]
-offset_left = 516.0
-offset_top = 288.0
-offset_right = 607.0
-offset_bottom = 311.0
+offset_left = 604.0
+offset_top = 221.0
+offset_right = 695.0
+offset_bottom = 244.0
 text = "ADRI + JACK"
 
 [node name="Label2" type="Label" parent="SplashScreen"]
-offset_left = 470.0
-offset_top = 369.0
-offset_right = 659.0
-offset_bottom = 392.0
+offset_left = 562.0
+offset_top = 311.0
+offset_right = 751.0
+offset_bottom = 334.0
 text = "ULTIMATE SMACKDOWN"
 
-[node name="UI" type="Control" parent="."]
+[node name="UI" type="MarginContainer" parent="."]
 visible = false
-layout_mode = 3
-anchors_preset = 0
-offset_right = 1152.0
-offset_bottom = 648.0
-
-[node name="RegisterContainer" type="VBoxContainer" parent="UI"]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -4.0
-offset_top = -23.5
-offset_right = 4.0
-offset_bottom = 23.5
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 1278.0
+offset_bottom = 589.0
 grow_horizontal = 2
 grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="RegisterContainer" type="VBoxContainer" parent="UI"]
+layout_mode = 2
+metadata/_edit_use_anchors_ = true
 
 [node name="Header_HBoxContainer" type="HBoxContainer" parent="UI/RegisterContainer"]
 layout_mode = 2
 
 [node name="Label" type="Label" parent="UI/RegisterContainer/Header_HBoxContainer"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 18
+theme_override_font_sizes/font_size = 25
 text = "Enter your name to join"
 
 [node name="ErrorMessageLabel" type="Label" parent="UI/RegisterContainer/Header_HBoxContainer"]
@@ -70,38 +69,42 @@ text = "This is an error!"
 
 [node name="TextEdit" type="TextEdit" parent="UI/RegisterContainer"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 30
+theme_override_font_sizes/font_size = 50
 placeholder_text = "nickname"
 scroll_fit_content_height = true
 
 [node name="HBoxContainer" type="HBoxContainer" parent="UI/RegisterContainer"]
 layout_mode = 2
+size_flags_vertical = 3
 alignment = 1
 
 [node name="AdriButton" type="TextureButton" parent="UI/RegisterContainer/HBoxContainer"]
 layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 4
 toggle_mode = true
 button_group = ExtResource("2_xug6l")
-texture_normal = ExtResource("2_nabw0")
-texture_pressed = ExtResource("3_8ak62")
+texture_normal = ExtResource("4_w1vhj")
+texture_pressed = ExtResource("5_jgnex")
 stretch_mode = 5
 
 [node name="JackButton" type="TextureButton" parent="UI/RegisterContainer/HBoxContainer"]
 layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 4
 toggle_mode = true
 button_group = ExtResource("2_xug6l")
-texture_normal = ExtResource("4_wwbod")
-texture_pressed = ExtResource("5_y42mv")
+texture_normal = ExtResource("6_conkq")
+texture_pressed = ExtResource("7_ks8dk")
 
 [node name="Button" type="Button" parent="UI/RegisterContainer"]
 layout_mode = 2
+theme_override_font_sizes/font_size = 30
 text = "Join"
 
 [node name="ConnectedUsersContainer" type="VBoxContainer" parent="UI"]
 visible = false
-layout_mode = 1
-offset_right = 131.0
-offset_bottom = 27.0
+layout_mode = 2
 
 [node name="Label" type="Label" parent="UI/ConnectedUsersContainer"]
 layout_mode = 2

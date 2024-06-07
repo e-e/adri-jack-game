@@ -10,8 +10,18 @@ var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 var direction_y
 var direction_x
 var strength
+@export var health = 100
 
+# actions
+var do_use_item: bool = false
+
+# debug
 var show_debug: bool = false
+
+# player/user data
+var data
+
+@onready var item: Item = $Item
 
 @export var player_id = 1:
   set(id):
@@ -22,17 +32,16 @@ func _enter_tree():
   $InputSynchronizer.set_multiplayer_authority(str(name).to_int())
   $MultiplayerSynchronizer.set_multiplayer_authority(1)
 
-func _ready():
-  #self.ready.connect(_on_ready)
-  pass
-
 
 #func _on_ready():
+  #self.ready.connect(_on_ready)
   #set_multiplayer_authority(player_id)
 
 
 func apply_flip_h(should_flip: bool):
   animation_player.flip_h = should_flip
+  item.scale.x = -1 if should_flip else 1
+  
 
 func _physics_process(delta):
   if not Engine.is_editor_hint():
@@ -41,16 +50,22 @@ func _physics_process(delta):
     _render_debug()
 
 # note: the "flip_h" is done above in "apply_flip_h", but is called from the server's instance of the "match"
-func _apply_animations(delta):
+func _apply_animations(_delta):
+  # server + client animations
+  if do_use_item:
+    item.use()
+    do_use_item = false
+  
   if MultiplayerManager.is_server:
     return
   
+  # client only animations
   if strength == 0:
     animation_player.play("idle")
   else:
     animation_player.play("walk")
     
-func _apply_movement_from_input(delta):
+func _apply_movement_from_input(_delta):
   #if not MultiplayerManager.is_server:
     #return
   
@@ -67,6 +82,9 @@ func _apply_movement_from_input(delta):
     velocity.x = direction_x * SPEED
   else:
     velocity.x = move_toward(velocity.x, 0, SPEED)
+    
+  if do_use_item:
+    item.use()
 
   move_and_slide()
 
