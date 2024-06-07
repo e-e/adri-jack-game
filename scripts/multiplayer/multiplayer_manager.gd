@@ -45,7 +45,7 @@ func join_server(nickname: String, character: String):
   
   if use_websocket:
     client_peer = WebSocketMultiplayerPeer.new()
-    connection_error = client_peer.create_client("%s:%s" % [Config.server_ws_address, Config.client_port])
+    connection_error = client_peer.create_client("%s%s" % [Config.server_ws_address, Config.client_port])
   else:
     client_peer = ENetMultiplayerPeer.new()
     connection_error = client_peer.create_client(Config.server_address, int(Config.client_port))

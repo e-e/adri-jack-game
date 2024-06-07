@@ -1,9 +1,9 @@
 extends Node
 
-var server_address: String = "localhost"
-var server_ws_address: String = "ws://localhost"
-var server_port: String = "8081"
-var client_port: String = "8081"
+var server_address: String = "adri-jack-game.eric.wtf"
+var server_ws_address: String = "wss://adri-jack-game.eric.wtf"
+var server_port: String = "16001"
+var client_port: String = ":8081"
 
 func _enter_tree() -> void:
   for arg in OS.get_cmdline_user_args():
